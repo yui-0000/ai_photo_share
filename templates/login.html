@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン - 写真共有アプリ</title>
+</head>
+<body>
+    <h1>ログイン</h1>
+
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
+            {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+            {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div style="margin-top: 10px;">
+            {{ form.submit() }}
+        </div>
+    </form>
+
+    <p style="margin-top: 20px;">
+        <a href="{{ url_for('register') }}">アカウントをお持ちでない方はこちら（新規登録）</a> | 
+        <a href="{{ url_for('index') }}">トップへ戻る</a>
+    </p>
+</body>
+</html>

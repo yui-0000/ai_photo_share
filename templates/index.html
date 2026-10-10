@@ -2,9 +2,207 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>写真共有アプリ</title>
+    <title>PHOTO SHARE - ギャラリー</title>
+    <style>
+        /* 基本リセットとスタイリッシュなフォント設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #fff;
+            background-color: #111;
+        }
+
+        /* ヒーローセクション（背景画像 ＋ ダークオーバーレイ） */
+        .hero {
+            position: relative;
+            height: 100vh;
+            /* サンプルとして美しい風景写真を背景に設定しています */
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 50px;
+        }
+
+        /* 暗めのフィルター（文字を見やすくするため） */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1;
+        }
+
+        /* ヘッダー・ナビゲーション */
+        header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* 右上の予約ボタン風リンク */
+        .reserve-btn {
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 10px 24px;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .reserve-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* 中央のブランドロゴ・タイトル */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            margin: auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            letter-spacing: 6px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .hero-content p {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* 下部エリア（説明文とスクロール表示） */
+        .hero-footer {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 11px;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .hero-description {
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 30px;
+            background: #fff;
+            margin: 8px auto 0 auto;
+            opacity: 0.6;
+        }
+
+        /* フラッシュメッセージのスタイリング */
+        .flash-messages {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            list-style: none;
+            text-align: center;
+        }
+        .flash-messages li {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <h1>写真共有アプリ</h1>
+
+    <!-- フラッシュメッセージ -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+          {% for category, message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="hero">
+        <!-- 上部ナビゲーション -->
+        <header>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">TOP</a>
+                <a href="#">GALLERY</a>
+                <a href="#">ABOUT</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div>
+                {% if current_user.is_authenticated %}
+                    <span style="margin-right: 15px;">{{ current_user.username }} さん</span>
+                    <a href="{{ url_for('logout') }}" class="reserve-btn">LOGOUT</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-links" style="margin-right: 20px; display:inline-block;">LOGIN</a>
+                    <a href="{{ url_for('register') }}" class="reserve-btn">REGISTER</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- 中央タイトル -->
+        <div class="hero-content">
+            <h1>PHOTO SHARE</h1>
+            <p>Share your special moments with friends</p>
+        </div>
+
+        <!-- 下部情報 -->
+        <div class="hero-footer">
+            <div class="hero-description">
+                PHOTO SHARE IS A PLACE WHERE YOUR BELOVED MOMENTS ARE CAREFULLY SHARED BY FRIENDS AND COMMUNITY.
+            </div>
+            <div class="scroll-indicator">
+                SCROLL
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

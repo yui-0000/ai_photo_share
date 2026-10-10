@@ -4,153 +4,47 @@
     <meta charset="UTF-8">
     <title>PHOTO SHARE - ギャラリー</title>
     <style>
-        /* 基本リセットとスタイリッシュなフォント設定 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            height: 100%;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: #fff;
-            background-color: #111;
-        }
-
-        /* ヒーローセクション（背景画像 ＋ ダークオーバーレイ） */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { font-family: 'Helvetica Neue', Arial, sans-serif; color: #fff; background-color: #111; }
         .hero {
-            position: relative;
-            height: 100vh;
-            /* サンプルとして美しい風景写真を背景に設定しています */
+            position: relative; height: 100vh;
             background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: space-between;
             padding: 30px 50px;
         }
-
-        /* 暗めのフィルター（文字を見やすくするため） */
         .hero::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 1;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45); z-index: 1;
         }
+        header { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; letter-spacing: 2px; font-size: 14px; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; transition: opacity 0.3s; }
+        .nav-links a:hover { opacity: 0.7; }
+        .reserve-btn { border: 1px solid rgba(255, 255, 255, 0.8); padding: 10px 24px; text-decoration: none; color: #fff; letter-spacing: 2px; transition: all 0.3s; }
+        .reserve-btn:hover { background: #fff; color: #000; }
+        .hero-content { position: relative; z-index: 2; text-align: center; margin: auto; }
+        .hero-content h1 { font-size: 3.5rem; letter-spacing: 6px; font-weight: 300; margin-bottom: 10px; }
+        .hero-content p { font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; opacity: 0.8; }
+        .hero-footer { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; letter-spacing: 1px; opacity: 0.8; }
+        .hero-description { max-width: 300px; line-height: 1.6; }
+        .scroll-indicator { text-align: center; text-transform: uppercase; letter-spacing: 3px; }
+        .scroll-line { width: 1px; height: 30px; background: #fff; margin: 8px auto 0 auto; opacity: 0.6; }
 
-        /* ヘッダー・ナビゲーション */
-        header {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            letter-spacing: 2px;
-            font-size: 14px;
-        }
+        .flash-messages { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10; list-style: none; text-align: center; }
+        .flash-messages li { background: rgba(0, 0, 0, 0.8); padding: 10px 20px; margin-bottom: 5px; border-radius: 4px; font-size: 14px; }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.7;
-        }
-
-        /* 右上の予約ボタン風リンク */
-        .reserve-btn {
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            padding: 10px 24px;
-            text-decoration: none;
-            color: #fff;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-        }
-
-        .reserve-btn:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        /* 中央のブランドロゴ・タイトル */
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            margin: auto;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            letter-spacing: 6px;
-            font-weight: 300;
-            margin-bottom: 10px;
-        }
-
-        .hero-content p {
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        /* 下部エリア（説明文とスクロール表示） */
-        .hero-footer {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            font-size: 11px;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        .hero-description {
-            max-width: 300px;
-            line-height: 1.6;
-        }
-
-        .scroll-indicator {
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 30px;
-            background: #fff;
-            margin: 8px auto 0 auto;
-            opacity: 0.6;
-        }
-
-        /* フラッシュメッセージのスタイリング */
-        .flash-messages {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            list-style: none;
-            text-align: center;
-        }
-        .flash-messages li {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
+        /* タイムライン（ギャラリー）セクション */
+        .timeline-section { background: #1a1a1a; color: #333; padding: 80px 20px; min-height: 100vh; }
+        .timeline-container { max-width: 600px; margin: 0 auto; }
+        .timeline-title { text-align: center; font-size: 2rem; color: #fff; margin-bottom: 40px; letter-spacing: 2px; font-weight: 300; }
+        .post-card { background: #fff; border-radius: 8px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .post-header { padding: 15px; font-weight: bold; font-size: 0.95rem; border-bottom: 1px solid #eee; }
+        .post-image img { width: 100%; height: auto; display: block; }
+        .post-body { padding: 15px; }
+        .post-caption { margin-bottom: 10px; line-height: 1.5; }
+        .post-date { font-size: 0.8rem; color: #888; }
+        .no-posts { text-align: center; color: #888; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -167,13 +61,13 @@
     {% endwith %}
 
     <div class="hero">
-        <!-- 上部ナビゲーション -->
         <header>
             <div class="nav-links">
                 <a href="{{ url_for('index') }}">TOP</a>
-                <a href="#">GALLERY</a>
-                <a href="#">ABOUT</a>
-                <a href="#">FAQ</a>
+                <a href="#timeline">GALLERY</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('post_new') }}" style="color: #ffeb3b; font-weight: bold;">+ 投稿する</a>
+                {% endif %}
             </div>
             <div>
                 {% if current_user.is_authenticated %}
@@ -186,13 +80,11 @@
             </div>
         </header>
 
-        <!-- 中央タイトル -->
         <div class="hero-content">
             <h1>PHOTO SHARE</h1>
             <p>Share your special moments with friends</p>
         </div>
 
-        <!-- 下部情報 -->
         <div class="hero-footer">
             <div class="hero-description">
                 PHOTO SHARE IS A PLACE WHERE YOUR BELOVED MOMENTS ARE CAREFULLY SHARED BY FRIENDS AND COMMUNITY.
@@ -201,6 +93,35 @@
                 SCROLL
                 <div class="scroll-line"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- 投稿一覧タイムライン -->
+    <div id="timeline" class="timeline-section">
+        <div class="timeline-container">
+            <h2 class="timeline-title">GALLERY TIMELINE</h2>
+            
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="post-card">
+                        <div class="post-header">
+                            👤 {{ post.user.username }}
+                        </div>
+                        <div class="post-image">
+                            <!-- カスタムルート経由で画像を安全に表示 -->
+                            <img src="{{ url_for('uploaded_file', filename=post.image_filename) }}" alt="投稿画像">
+                        </div>
+                        <div class="post-body">
+                            {% if post.caption %}
+                                <p class="post-caption">{{ post.caption }}</p>
+                            {% endif %}
+                            <p class="post-date">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-posts">まだ投稿がありません。最初の写真を投稿してみましょう！</p>
+            {% endif %}
         </div>
     </div>
 

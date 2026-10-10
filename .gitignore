@@ -6,14 +6,11 @@
 
 # Python キャッシュ
 __pycache__/
-*.py
 *.pyc
-*.pyo
 
 # SQLite データベース
 *.db
-*.sqlite
-*.sqlite3
 
-# Flask インスタンスフォルダ
-instance/
+# アップロードされた画像（.gitkeepは除外対象から外してGit管理に残す）
+uploads/posts/*
+!uploads/posts/.gitkeep
